@@ -1,4 +1,4 @@
-name: Push directory to another repository
+name: Push directory to another repository from Windows host
 description: >-
   Useful to push files to another repository to be used, for example, via github
   pages
@@ -48,10 +48,9 @@ inputs:
     description: '[Optional] The directory to wipe and replace in the target repository'
     default: ''
     required: false
-        
+
 runs:
-  using: docker
-  image: Dockerfile
+  using: "composite"
   args:
     - '${{ inputs.source-before-directory }}'
     - '${{ inputs.source-directory }}'
@@ -64,6 +63,24 @@ runs:
     - '${{ inputs.target-branch }}'
     - '${{ inputs.commit-message }}'
     - '${{ inputs.target-directory }}'
+  steps:
+    - run: echo "::SETTING UP::"
+      shell: pwsh
+    - run: mkdir --parent "$HOME/.ssh" 
+      shell: pwsh
+    - run: set DEPLOY_KEY_FILE="$HOME/.ssh/deploy_key"
+      shell: pwsh
+    - run: echo "${SSH_DEPLOY_KEY}" > "$DEPLOY_KEY_FILE"
+      shell: pwsh
+    # - run: export GIT_SSH_COMMAND="ssh -i "$DEPLOY_KEY_FILE" -o UserKnownHostsFile=$SSH_KNOWN_HOSTS_FILE"
+    - run: set GIT_CMD_REPOSITORY="git@${{ inputs.github-server }}:${{ inputs.destination-github-username }}/${{ inputs.destination-repository-username }}.git"
+      shell: pwsh
+    - run: git config --global user.email "${{ inputs.user-email }}"
+      shell: pwsh
+    - run: git config --global user.name "${{ inputs.user-name }}"
+      shell: pwsh
+
+
 branding:
   icon: git-commit
   color: green
