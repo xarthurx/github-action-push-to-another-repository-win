@@ -1,7 +1,7 @@
 name: Push directory to another repository from Windows host
 description: >-
-  Useful to push files to another repository to be used, for example, via github
-  pages
+  Push files from current repo to another repo, customzied for Windows environment.
+
 inputs:
   source-before-directory:
     description: Source before directory from the origin directory
@@ -64,22 +64,27 @@ runs:
   #   - '${{ inputs.commit-message }}'
   #   - '${{ inputs.target-directory }}'
   steps:
-    - run: echo "::SETTING UP::"
-      shell: pwsh
+    # ssh setup
     - run: mkdir $HOME/.ssh
       shell: pwsh
     - run: $DEPLOY_KEY_FILE="$HOME/.ssh/deploy_key"
       shell: pwsh
     - run: echo "${SSH_DEPLOY_KEY}" > "$DEPLOY_KEY_FILE"
       shell: pwsh
+
     # - run: export GIT_SSH_COMMAND="ssh -i "$DEPLOY_KEY_FILE" -o UserKnownHostsFile=$SSH_KNOWN_HOSTS_FILE"
     - run: $GIT_CMD_REPOSITORY="git@${{ inputs.github-server }}:${{ inputs.destination-github-username }}/${{ inputs.destination-repository-name }}.git"
       shell: pwsh
+    - run: echo $GIT_CMD_REPOSITORY
+      shell: pwsh
+
+    # git setup
     - run: git config --global user.email "${{ inputs.user-email }}"
       shell: pwsh
     - run: git config --global user.name "${{ inputs.user-name }}"
       shell: pwsh
 
+    # clone target repo and copy files
     - run: $CLONE_DIR=$(mktemp -d)
       shell: pwsh
     - run: git clone --single-branch --depth 1 --branch "${{ inputs.target-branch }}" "$GIT_CMD_REPOSITORY" "$CLONE_DIR"
@@ -89,6 +94,8 @@ runs:
       shell: pwsh
     - run: cp -ra ${{ inputs.source-directory }}/* $CLONE_DIR/${{ inputs.target-directory }}
       shell: pwsh
+
+    # commit and push
     - run: cd $CLONE_DIR 
       shell: pwsh
     - run: git add .
