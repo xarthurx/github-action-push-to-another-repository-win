@@ -75,6 +75,8 @@ runs:
     #   shell: bash
     - run: SSH_KNOWN_HOSTS_FILE="$HOME/.ssh/known_hosts"
       shell: bash
+    - run: ssh-keyscan -H "$GITHUB_SERVER" > "$SSH_KNOWN_HOSTS_FILE"
+      shell: bash
     - run: export GIT_SSH_COMMAND="ssh -i "${SSH_DEPLOY_KEY}" -o UserKnownHostsFile=$SSH_KNOWN_HOSTS_FILE"
       shell: bash
     - run: GIT_CMD_REPOSITORY="git@${{ inputs.github-server }}:${{ inputs.destination-github-username }}/${{ inputs.destination-repository-name }}.git"
@@ -85,19 +87,19 @@ runs:
 
     # git setup
     # clone target repo and copy files
-    - run: set CLONE_DIR=$(mktemp -d)
-      shell: cmd
+    - run: CLONE_DIR=$(mktemp -d)
+      shell: bash
     - run: git config --global user.email "${{ inputs.user-email }}"
-      shell: cmd
+      shell: bash
     - run: git config --global user.name "${{ inputs.user-name }}"
-      shell: cmd
-    - run: git clone --single-branch --depth 1 --branch "${{ inputs.target-branch }}" %GIT_CMD_REPOSITORY% %CLONE_DIR%
-      shell: cmd 
+      shell: bash
+    - run: git clone --single-branch --depth 1 --branch "$TARGET_BRANCH" "$GIT_CMD_REPOSITORY" "$CLONE_DIR"
+      shell: bash
 
     - run: git config --global --add safe.directory $CLONE_DIR
-      shell: cmd
+      shell: bash
     - run: cp -ra ${{ inputs.source-directory }}/* $CLONE_DIR/${{ inputs.target-directory }}
-      shell: cmd
+      shell: bash
 
     # commit and push
     - run: cd $CLONE_DIR 
