@@ -73,12 +73,34 @@ runs:
     - run: echo "${SSH_DEPLOY_KEY}" > "$DEPLOY_KEY_FILE"
       shell: pwsh
     # - run: export GIT_SSH_COMMAND="ssh -i "$DEPLOY_KEY_FILE" -o UserKnownHostsFile=$SSH_KNOWN_HOSTS_FILE"
-    - run: set GIT_CMD_REPOSITORY="git@${{ inputs.github-server }}:${{ inputs.destination-github-username }}/${{ inputs.destination-repository-username }}.git"
+    - run: set GIT_CMD_REPOSITORY="git@${{ inputs.github-server }}:${{ inputs.destination-github-username }}/${{ inputs.destination-repository-name }}.git"
       shell: pwsh
     - run: git config --global user.email "${{ inputs.user-email }}"
       shell: pwsh
     - run: git config --global user.name "${{ inputs.user-name }}"
       shell: pwsh
+
+    - run: mkdir clone-repo
+      shell: pwsh
+    - run: mkdir tmpDir
+      shell: pwsh
+    - run: git clone --single-branch --depth 1 --branch "${{ inputs.target-branch }}" "$GIT_CMD_REPOSITORY" clone-repo 
+      shell: pwsh
+    - run: mv clone-repo/.git tmpDir/.git
+      shell: pwsh
+
+    - run: git config --global --add safe.directory clone-repo
+      shell: pwsh
+    - run: cp -ra ${{ inputs.source-directory }}/* clone-repo/${{ inputs.target-directory }}
+      shell: pwsh
+    - run: cd clone-repo
+      shell: pwsh
+    - run: git add .
+      shell: pwsh
+    # git diff-index : to avoid doing the git commit failing if there are no changes to be commit
+    - run: git diff-index --quiet HEAD || git commit --message "$COMMIT_MESSAGE"
+      shell: pwsh
+    - run: git push "$GIT_CMD_REPOSITORY" --set-upstream "${{ inputs.target-branch }}"
 
 
 branding:
