@@ -4,28 +4,6 @@ set -e  # if a command fails it stops the execution
 set -u  # script fails if trying to access to an undefined variable
 
 echo "[+] Action start"
-SOURCE_BEFORE_DIRECTORY="${{ inputs.source-before-directory }}"
-SOURCE_DIRECTORY="${{ inputs.source-directory }}"
-DESTINATION_GITHUB_USERNAME="${{ inputs.destination-github-username }}"
-DESTINATION_REPOSITORY_NAME="${{ inputs.destination-repository-name }}"
-GITHUB_SERVER="${{ inputs.github-server }}"
-USER_EMAIL="${{ inputs.user-email }}"
-USER_NAME="${{ inputs.user-name }}"
-DESTINATION_REPOSITORY_USERNAME="${{ inputs.destination-repository-username }}"
-TARGET_BRANCH="${{ inputs.target-branch }}"
-COMMIT_MESSAGE="${{ inputs.commit-message }}"
-TARGET_DIRECTORY="${{ inputs.target-directory }}"
-
-  #   - '${{ inputs.source-directory }}'
-  #   - '${{ inputs.destination-github-username }}'
-  #   - '${{ inputs.destination-repository-name }}'
-  #   - '${{ inputs.github-server }}'
-  #   - '${{ inputs.user-email }}'
-  #   - '${{ inputs.user-name }}'
-  #   - '${{ inputs.destination-repository-username }}'
-  #   - '${{ inputs.target-branch }}'
-  #   - '${{ inputs.commit-message }}'
-  #   - '${{ inputs.target-directory }}'
 
 if [ -z "$DESTINATION_REPOSITORY_USERNAME" ]
 then
