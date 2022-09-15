@@ -68,23 +68,23 @@ runs:
       shell: pwsh
     - run: mkdir $HOME/.ssh
       shell: pwsh
-    - run: set DEPLOY_KEY_FILE="$HOME/.ssh/deploy_key"
+    - run: $DEPLOY_KEY_FILE="$HOME/.ssh/deploy_key"
       shell: pwsh
     - run: echo "${SSH_DEPLOY_KEY}" > "$DEPLOY_KEY_FILE"
       shell: pwsh
     # - run: export GIT_SSH_COMMAND="ssh -i "$DEPLOY_KEY_FILE" -o UserKnownHostsFile=$SSH_KNOWN_HOSTS_FILE"
-    - run: set GIT_CMD_REPOSITORY="git@${{ inputs.github-server }}:${{ inputs.destination-github-username }}/${{ inputs.destination-repository-name }}.git"
+    - run: $GIT_CMD_REPOSITORY="git@${{ inputs.github-server }}:${{ inputs.destination-github-username }}/${{ inputs.destination-repository-name }}.git"
       shell: pwsh
     - run: git config --global user.email "${{ inputs.user-email }}"
       shell: pwsh
     - run: git config --global user.name "${{ inputs.user-name }}"
       shell: pwsh
 
-    - run: set CLONE_DIR=$(mktemp -d)
+    - run: $CLONE_DIR=$(mktemp -d)
       shell: pwsh
     # - run: set TEMP_DIR=$(mktemp -d)
     #   shell: pwsh
-    - run: git clone --single-branch --depth 1 --branch "${{ inputs.target-branch }}" %GIT_CMD_REPOSITORY% %CLONE_DIR% 
+    - run: git clone --single-branch --depth 1 --branch "${{ inputs.target-branch }}" $GIT_CMD_REPOSITORY $CLONE_DIR
       shell: pwsh
     # - run: mv $CLONE_DIR/.git $TEMP_DIR/.git
     #   shell: pwsh
