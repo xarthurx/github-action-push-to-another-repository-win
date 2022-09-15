@@ -80,20 +80,20 @@ runs:
     - run: git config --global user.name "${{ inputs.user-name }}"
       shell: pwsh
 
-    - run: mkdir clone-repo
+    - run: set CLONE_DIR=$(mktemp -d)
       shell: pwsh
-    - run: mkdir tmpDir
+    - run: set TEMP_DIR=$(mktemp -d)
       shell: pwsh
-    - run: git clone --single-branch --depth 1 --branch "${{ inputs.target-branch }}" "$GIT_CMD_REPOSITORY" clone-repo 
+    - run: git clone --single-branch --depth 1 --branch "${{ inputs.target-branch }}" $GIT_CMD_REPOSITORY $CLONE_DIR 
       shell: pwsh
-    - run: mv clone-repo/.git tmpDir/.git
+    - run: mv $CLONE_DIR/.git $TEMP_DIR/.git
       shell: pwsh
 
-    - run: git config --global --add safe.directory clone-repo
+    - run: git config --global --add safe.directory $CLONE_DIR
       shell: pwsh
-    - run: cp -ra ${{ inputs.source-directory }}/* clone-repo/${{ inputs.target-directory }}
+    - run: cp -ra ${{ inputs.source-directory }}/* $CLONE_DIR/${{ inputs.target-directory }}
       shell: pwsh
-    - run: cd clone-repo
+    - run: cd $CLONE_DIR 
       shell: pwsh
     - run: git add .
       shell: pwsh
