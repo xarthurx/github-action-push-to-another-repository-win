@@ -73,22 +73,22 @@ runs:
     #   shell: pwsh
 
     # - run: export GIT_SSH_COMMAND="ssh -i "$DEPLOY_KEY_FILE" -o UserKnownHostsFile=$SSH_KNOWN_HOSTS_FILE"
-    - run: $GIT_CMD_REPOSITORY="git@${{ inputs.github-server }}:${{ inputs.destination-github-username }}/${{ inputs.destination-repository-name }}.git"
-      shell: pwsh
-    - run: echo $GIT_CMD_REPOSITORY
-      shell: pwsh
+    - run: set GIT_CMD_REPOSITORY="git@${{ inputs.github-server }}:${{ inputs.destination-github-username }}/${{ inputs.destination-repository-name }}.git"
+      shell: cmd
+    - run: echo %GIT_CMD_REPOSITORY%
+      shell: cmd 
 
     # git setup
     - run: git config --global user.email "${{ inputs.user-email }}"
-      shell: pwsh
+      shell: cmd
     - run: git config --global user.name "${{ inputs.user-name }}"
-      shell: pwsh
+      shell: cmd
 
     # clone target repo and copy files
-    - run: $CLONE_DIR=$(mktemp -d)
-      shell: pwsh
-    - run: git clone --single-branch --depth 1 --branch "${{ inputs.target-branch }}" "$GIT_CMD_REPOSITORY" "$CLONE_DIR"
-      shell: pwsh
+    - run: set CLONE_DIR=$(mktemp -d)
+      shell: cmd
+    - run: git clone --single-branch --depth 1 --branch "${{ inputs.target-branch }}" %GIT_CMD_REPOSITORY% %CLONE_DIR%
+      shell: cmd 
 
     - run: git config --global --add safe.directory $CLONE_DIR
       shell: pwsh
