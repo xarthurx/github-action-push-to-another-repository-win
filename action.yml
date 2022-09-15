@@ -65,16 +65,18 @@ runs:
   #   - '${{ inputs.target-directory }}'
   steps:
     # ssh setup
-    - run: mkdir -p $HOME/.ssh
+    # - run: mkdir -p $HOME/.ssh
+    #   shell: bash
+    - run: SSH_DIR=$(mktemp -d)
       shell: bash
-    - run: $DEPLOY_KEY_FILE="$HOME/.ssh/deploy_key"
-      shell: pwsh
+    - run: DEPLOY_KEY_FILE="$SSH_DIR/deploy_key"
+      shell: bash 
     - run: echo "${SSH_DEPLOY_KEY}" > "$DEPLOY_KEY_FILE"
       shell: bash
     - run: chmod 600 "$DEPLOY_KEY_FILE"
       shell: bash
-    - run: $SSH_KNOWN_HOSTS_FILE="$HOME/.ssh/known_hosts"
-      shell: pwsh
+    - run: SSH_KNOWN_HOSTS_FILE="$SSH_DIR/known_hosts"
+      shell: bash
     - run: ssh-keyscan -H "$GITHUB_SERVER" > "$SSH_KNOWN_HOSTS_FILE"
       shell: bash
     - run: export GIT_SSH_COMMAND="ssh -i "${SSH_DEPLOY_KEY}" -o UserKnownHostsFile=$SSH_KNOWN_HOSTS_FILE"
