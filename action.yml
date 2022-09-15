@@ -74,9 +74,9 @@ runs:
 
     # - run: export GIT_SSH_COMMAND="ssh -i "$DEPLOY_KEY_FILE" -o UserKnownHostsFile=$SSH_KNOWN_HOSTS_FILE"
     - run: set GIT_CMD_REPOSITORY="git@${{ inputs.github-server }}:${{ inputs.destination-github-username }}/${{ inputs.destination-repository-name }}.git"
-      shell: cmd
-    - run: echo %GIT_CMD_REPOSITORY%
-      shell: cmd 
+      shell: pwsh
+    - run: echo $env:GIT_CMD_REPOSITORY
+      shell: pwsh
 
     # git setup
     - run: git config --global user.email "${{ inputs.user-email }}"
@@ -91,20 +91,20 @@ runs:
       shell: cmd 
 
     - run: git config --global --add safe.directory $CLONE_DIR
-      shell: pwsh
+      shell: cmd
     - run: cp -ra ${{ inputs.source-directory }}/* $CLONE_DIR/${{ inputs.target-directory }}
-      shell: pwsh
+      shell: cmd
 
     # commit and push
     - run: cd $CLONE_DIR 
-      shell: pwsh
+      shell: cmd
     - run: git add .
-      shell: pwsh
+      shell: cmd
     # git diff-index : to avoid doing the git commit failing if there are no changes to be commit
     - run: git diff-index --quiet HEAD || git commit --message "$COMMIT_MESSAGE"
-      shell: pwsh
+      shell: cmd
     - run: git push $GIT_CMD_REPOSITORY --set-upstream "${{ inputs.target-branch }}"
-      shell: pwsh
+      shell: cmd
 
 
 branding:
