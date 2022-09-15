@@ -101,6 +101,7 @@ runs:
     - run: git diff-index --quiet HEAD || git commit --message "$COMMIT_MESSAGE"
       shell: pwsh
     - run: git push "$GIT_CMD_REPOSITORY" --set-upstream "${{ inputs.target-branch }}"
+      shell: pwsh
 
 
 branding:
