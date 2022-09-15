@@ -82,12 +82,12 @@ runs:
 
     - run: set CLONE_DIR=$(mktemp -d)
       shell: pwsh
-    - run: set TEMP_DIR=$(mktemp -d)
+    # - run: set TEMP_DIR=$(mktemp -d)
+    #   shell: pwsh
+    - run: git clone --single-branch --depth 1 --branch "${{ inputs.target-branch }}" "$GIT_CMD_REPOSITORY" ""$CLONE_DIR 
       shell: pwsh
-    - run: git clone --single-branch --depth 1 --branch "${{ inputs.target-branch }}" $GIT_CMD_REPOSITORY $CLONE_DIR 
-      shell: pwsh
-    - run: mv $CLONE_DIR/.git $TEMP_DIR/.git
-      shell: pwsh
+    # - run: mv $CLONE_DIR/.git $TEMP_DIR/.git
+    #   shell: pwsh
 
     - run: git config --global --add safe.directory $CLONE_DIR
       shell: pwsh
@@ -100,7 +100,7 @@ runs:
     # git diff-index : to avoid doing the git commit failing if there are no changes to be commit
     - run: git diff-index --quiet HEAD || git commit --message "$COMMIT_MESSAGE"
       shell: pwsh
-    - run: git push "$GIT_CMD_REPOSITORY" --set-upstream "${{ inputs.target-branch }}"
+    - run: git push $GIT_CMD_REPOSITORY --set-upstream "${{ inputs.target-branch }}"
       shell: pwsh
 
 
