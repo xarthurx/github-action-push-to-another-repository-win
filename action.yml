@@ -67,14 +67,14 @@ runs:
     # ssh setup
     - run: mkdir -p $HOME/.ssh
       shell: bash
-    - run: DEPLOY_KEY_FILE="$HOME/.ssh/deploy_key"
+    - run: $DEPLOY_KEY_FILE="$HOME/.ssh/deploy_key"
+      shell: pwsh
+    - run: echo "${SSH_DEPLOY_KEY}" > "$DEPLOY_KEY_FILE"
       shell: bash
-    # - run: echo "${SSH_DEPLOY_KEY}" > "$DEPLOY_KEY_FILE"
-    #   shell: bash
-    # - run: chmod 600 "$DEPLOY_KEY_FILE"
-    #   shell: bash
-    - run: SSH_KNOWN_HOSTS_FILE="$HOME/.ssh/known_hosts"
+    - run: chmod 600 "$DEPLOY_KEY_FILE"
       shell: bash
+    - run: $SSH_KNOWN_HOSTS_FILE="$HOME/.ssh/known_hosts"
+      shell: pwsh
     - run: ssh-keyscan -H "$GITHUB_SERVER" > "$SSH_KNOWN_HOSTS_FILE"
       shell: bash
     - run: export GIT_SSH_COMMAND="ssh -i "${SSH_DEPLOY_KEY}" -o UserKnownHostsFile=$SSH_KNOWN_HOSTS_FILE"
