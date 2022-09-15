@@ -84,7 +84,7 @@ runs:
       shell: pwsh
     # - run: set TEMP_DIR=$(mktemp -d)
     #   shell: pwsh
-    - run: git clone --single-branch --depth 1 --branch "${{ inputs.target-branch }}" "$GIT_CMD_REPOSITORY" ""$CLONE_DIR 
+    - run: git clone --single-branch --depth 1 --branch "${{ inputs.target-branch }}" %GIT_CMD_REPOSITORY% %CLONE_DIR% 
       shell: pwsh
     # - run: mv $CLONE_DIR/.git $TEMP_DIR/.git
     #   shell: pwsh
