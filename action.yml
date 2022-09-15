@@ -69,13 +69,13 @@ runs:
       shell: bash
     - run: DEPLOY_KEY_FILE="$HOME/.ssh/deploy_key"
       shell: bash
-    - run: echo "${SSH_DEPLOY_KEY}" > $DEPLOY_KEY_FILE
+    - run: echo "${SSH_DEPLOY_KEY}" >> "$DEPLOY_KEY_FILE"
       shell: bash
     - run: chmod 600 "$DEPLOY_KEY_FILE"
       shell: bash
     - run: SSH_KNOWN_HOSTS_FILE="$HOME/.ssh/known_hosts"
       shell: bash
-    - run: export GIT_SSH_COMMAND="ssh -i $DEPLOY_KEY_FILE -o UserKnownHostsFile=$SSH_KNOWN_HOSTS_FILE"
+    - run: export GIT_SSH_COMMAND="ssh -i "$DEPLOY_KEY_FILE" -o UserKnownHostsFile=$SSH_KNOWN_HOSTS_FILE"
       shell: bash
     - run: GIT_CMD_REPOSITORY="git@${{ inputs.github-server }}:${{ inputs.destination-github-username }}/${{ inputs.destination-repository-name }}.git"
       shell: bash
