@@ -65,12 +65,12 @@ runs:
   #   - '${{ inputs.target-directory }}'
   steps:
     # ssh setup
-    - run: mkdir $HOME/.ssh
-      shell: pwsh
-    - run: $DEPLOY_KEY_FILE="$HOME/.ssh/deploy_key"
-      shell: pwsh
-    - run: echo "${SSH_DEPLOY_KEY}" > "$DEPLOY_KEY_FILE"
-      shell: pwsh
+    # - run: mkdir $HOME/.ssh
+    #   shell: pwsh
+    # - run: $DEPLOY_KEY_FILE="$HOME/.ssh/deploy_key"
+    #   shell: pwsh
+    # - run: echo "${SSH_DEPLOY_KEY}" > "$DEPLOY_KEY_FILE"
+    #   shell: pwsh
 
     # - run: export GIT_SSH_COMMAND="ssh -i "$DEPLOY_KEY_FILE" -o UserKnownHostsFile=$SSH_KNOWN_HOSTS_FILE"
     - run: $GIT_CMD_REPOSITORY="git@${{ inputs.github-server }}:${{ inputs.destination-github-username }}/${{ inputs.destination-repository-name }}.git"
