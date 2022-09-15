@@ -65,11 +65,11 @@ runs:
   #   - '${{ inputs.target-directory }}'
   steps:
     # ssh setup
-    - run: mkdir --parents $HOME/.ssh
+    - run: mkdir -p $HOME/.ssh
       shell: bash
     - run: DEPLOY_KEY_FILE="$HOME/.ssh/deploy_key"
       shell: bash
-    - run: echo "${SSH_DEPLOY_KEY}" >> "$DEPLOY_KEY_FILE"
+    - run: echo "${SSH_DEPLOY_KEY}" > "$DEPLOY_KEY_FILE"
       shell: bash
     - run: chmod 600 "$DEPLOY_KEY_FILE"
       shell: bash
